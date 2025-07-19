@@ -3,7 +3,7 @@ import mongoose from "mongoose"
 import { seedInitialProducts } from "./services/productService";
 import user_router from "./routes/UserRoute";
 import productRouter from "./routes/ProductRoute";
-
+import cartRouter from "./routes/cartRoute";
 const app=express()
 const port=3001;
 app.use(express.json())
@@ -14,6 +14,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/ecommerce')
 seedInitialProducts()
 app.use('/user',user_router)
 app.use('/product',productRouter)
+app.use('/cart',cartRouter)
   app.listen(port,function(){
     console.log(`server is running at: http://localhost:${port}`)
 })

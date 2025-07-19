@@ -1,6 +1,7 @@
 import mongoose ,{Schema,Document} from "mongoose";
 
 export interface IProduct extends Document{
+  tostring: any;
    title:string;
     image:string;
     price:number;
