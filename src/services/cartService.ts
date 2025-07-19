@@ -79,3 +79,39 @@ cart.totalAmount=total
 const updatedcart=await cart.save();
 return {data:updatedcart,statuscode:200};
 }
+interface IDeleteItemInCart{
+  productId:any;
+  userId:string;
+}
+export const deleteItemInCart=async function ({productId,userId}:IDeleteItemInCart){
+  const cart=await GetActiveCartForUser({userId})
+   const exists_in_cart = cart.items.find(function(p){
+  return p.product.toString() === productId;
+});
+
+if(!exists_in_cart){
+  return{data:"Item doesn't exist in cart",statuscode:400};
+}
+const otherCartItems=cart.items.filter(function(p){
+ return p.product.toString() !== productId
+})
+
+const total = otherCartItems.reduce(function(sum,product){
+  sum+=product.quantity * product.unitprice;
+  return sum;
+},0)
+cart.items=otherCartItems;
+cart.totalAmount=total
+const updatedcart=await cart.save();
+return {data:updatedcart,statuscode:200};
+}
+interface IClearcart{
+    userId:string;
+}
+export const clearCart=async function ({userId}:IClearcart){
+  const cart=await GetActiveCartForUser({userId})
+  cart.items=[];
+  cart.totalAmount=0;
+  const updatedcart=await cart.save();
+  return {data:updatedcart,statuscode:200};
+}
