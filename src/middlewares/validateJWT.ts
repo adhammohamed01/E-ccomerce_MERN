@@ -15,7 +15,7 @@ if(!token){
     res.status(403).send("bearer token was not found");
     return;
 }
-jwt.verify(token,"ZQBSVEs258JpC3sFJtQGjfcIl2eZVS4x",async function(err,payload){
+jwt.verify(token,process.env.JWT_SECRET_KEY ||"",async function(err,payload){
     if(err){
     res.status(403).send("invalid token");
     return;
