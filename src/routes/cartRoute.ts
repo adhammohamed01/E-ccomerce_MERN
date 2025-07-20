@@ -1,6 +1,6 @@
 import  express from "express";
 import {Request} from "express"
-import { addItemToCart, clearCart, deleteItemInCart, GetActiveCartForUser, updateItemInCart } from "../services/cartService";
+import { addItemToCart, checkout, clearCart, deleteItemInCart, GetActiveCartForUser, updateItemInCart } from "../services/cartService";
 import validateJWT from "../middlewares/validateJWT";
 interface userrequest extends Request{
     user?:any;
@@ -36,6 +36,12 @@ router.delete('/',validateJWT,async function(req:userrequest,res){
     const userId=req.user._id;
     const{productId}=req.params;
     const response=await clearCart({userId})
+    res.status(response.statuscode).send(response.data);
+})
+router.post('/checkout',validateJWT,async function(req:userrequest,res){
+    const userId=req.user._id;
+    const {address}=req.body;
+    const response=await checkout({userId,address})
     res.status(response.statuscode).send(response.data);
 })
 export default router;
