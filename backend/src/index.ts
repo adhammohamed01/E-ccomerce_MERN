@@ -5,10 +5,12 @@ import { seedInitialProducts } from "./services/productService";
 import user_router from "./routes/UserRoute";
 import productRouter from "./routes/ProductRoute";
 import cartRouter from "./routes/cartRoute";
+import cors from "cors"
 dotenv.config();
 const app=express()
 const port=3001;
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 mongoose.connect(process.env.DATABASE_URL ||"")
   .then(function(){console.log('Mongo connected!')})
   .catch(function(err){console.log('Failed to connect',err)});
