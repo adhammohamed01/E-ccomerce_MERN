@@ -15,11 +15,8 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 
-
-const settings = ['My orders','Logout'];
-
 function Navbar() {
-  const {username,isAuthenticated}=useAuth();
+  const {username,isAuthenticated,logout}=useAuth();
   
   
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -36,6 +33,12 @@ function Navbar() {
   const handleLogin=()=>{
     Navigate('/login')
   }
+   const handleLogout=()=>{
+     logout();
+     Navigate('/');
+     handleCloseUserMenu()
+  }
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -108,11 +111,14 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+              
+                <MenuItem  onClick={handleCloseUserMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>My orders</Typography>
                 </MenuItem>
-              ))}
+                 <MenuItem  onClick={handleLogout}>
+                  <Typography sx={{ textAlign: 'center' }}>Logout</Typography>
+                </MenuItem>
+              
             </Menu>
             </>:<Button variant='contained' color='success' onClick={handleLogin}>Login</Button>}
            
