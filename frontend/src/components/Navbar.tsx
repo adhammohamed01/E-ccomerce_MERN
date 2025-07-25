@@ -13,6 +13,25 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { useAuth } from '../contex/Auth/AuthContext';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
+import Badge, { badgeClasses } from '@mui/material/Badge';
+import styled from '@emotion/styled';
+const CartBadge = styled(Badge)(() => ({
+  [`& .${badgeClasses.badge}`]: {
+    top: -12,
+    right: -6,
+    backgroundColor: 'violet',   // Violet background
+    color: 'white',              // White text
+    borderRadius: '50%',
+    height: 20,
+    width: 20,
+    minWidth: 0,
+    fontSize: '0.75rem',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+}));
 
 
 function Navbar() {
@@ -37,6 +56,9 @@ function Navbar() {
      logout();
      Navigate('/');
      handleCloseUserMenu()
+  }
+   const handleCart=()=>{
+    Navigate('/cart')
   }
 
   return (
@@ -86,9 +108,14 @@ function Navbar() {
           </Box>
           <Box>
           <Box sx={{ flexGrow: 0 }}>
+            
             {isAuthenticated?<>
              <Tooltip title="Open settings">
               <Box display="flex" alignItems="center" gap={2}>
+                 <IconButton onClick={handleCart}>
+                  <ShoppingCartIcon fontSize="small" sx={{color:"#ffffff"}} />
+                  <CartBadge badgeContent={2} color="primary" overlap="circular" />
+                </IconButton>
               <Typography>{username}</Typography>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt={username || ""} src="/static/images/avatar/2.jpg" />
