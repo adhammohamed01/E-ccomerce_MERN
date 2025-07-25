@@ -10,15 +10,21 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useAuth } from '../contex/Auth/AuthContext';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+
+const settings = ['My orders','Logout'];
 
 function Navbar() {
+  const {username,isAuthenticated}=useAuth();
+  
   
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
- 
+ const Navigate=useNavigate();
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -27,7 +33,9 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
+  const handleLogin=()=>{
+    Navigate('/login')
+  }
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -75,10 +83,14 @@ function Navbar() {
           </Box>
           <Box>
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            {isAuthenticated?<>
+             <Tooltip title="Open settings">
+              <Box display="flex" alignItems="center" gap={2}>
+              <Typography>{username}</Typography>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt={username || ""} src="/static/images/avatar/2.jpg" />
               </IconButton>
+              </Box>
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
@@ -102,6 +114,8 @@ function Navbar() {
                 </MenuItem>
               ))}
             </Menu>
+            </>:<Button variant='contained' color='success' onClick={handleLogin}>Login</Button>}
+           
           </Box>
           </Box>
         </Toolbar>
