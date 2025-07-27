@@ -22,10 +22,11 @@ useEffect(() => {
                 setError("Failed to fetch user cart");
             }
             const cart=await response.json();
-          
-            const cartItemsMapped=cart.items.map(({product,quantity}:{product:any,quantity:number})=>
-              ({productId:product._id,title:product.title,image:product.image,quantity,unitprice:product.unitprice}))  
-                  setCartItems(cartItemsMapped);}
+            const cartItemsMapped=cart.items.map(({product,quantity,unitprice}:{product:any,quantity:number,unitprice:number})=>
+              ({productId:product._id,title:product.title,image:product.image,quantity,unitprice}))  
+                  setCartItems(cartItemsMapped);
+                  setTotalAmount(cart.totalAmount);
+                }
               fetchcarts();
       }, [token]);
 const addItemToCart=async(productId:string)=>{
@@ -49,8 +50,8 @@ const addItemToCart=async(productId:string)=>{
       if(!cart){
          setError("Failed to parse cart")
       }
-      const cartItemsMapped=cart.items.map(({product,quantity}:{product:any,quantity:number})=>
-        ({productId:product._id,title:product.title,image:product.image,quantity,unitprice:product.unitprice}))  
+     const cartItemsMapped=cart.items.map(({product,quantity,unitprice}:{product:any,quantity:number,unitprice:number})=>
+              ({productId:product._id,title:product.title,image:product.image,quantity,unitprice}))  
      setCartItems([...cartItemsMapped]);
      setTotalAmount(cart.totalAmount);
     }
