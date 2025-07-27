@@ -1,17 +1,19 @@
 import Box from "@mui/material/Box"
 import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
-import { useEffect, useState } from "react"
-import { useAuth } from "../contex/Auth/AuthContext"
 import { useCart } from "../contex/Cart/CartContext"
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
 const Cartpage=()=>{
-    const [cart,setcart]=useState();
-    const [error,setError]=useState("");
-    const {cartItems,totalAmount}=useCart();
-    const{token}=useAuth()
+   
+    const {cartItems,totalAmount,updateItemToCart}=useCart();
+    const handleQuantity=(productId:string,quantity:number)=>{
+        if(quantity <= 0){
+          return;
+        }
+        updateItemToCart(productId,quantity)
+    }
     
 
     return ( <Container >
@@ -30,8 +32,8 @@ const Cartpage=()=>{
                         </Box>
                         </Box> 
                          <ButtonGroup variant="contained" aria-label="Basic button group">
-                                <Button>+</Button>
-                                <Button>-</Button>
+                                <Button onClick={()=>handleQuantity(item.productId,item.quantity + 1)}>+</Button>
+                                <Button onClick={()=>handleQuantity(item.productId,item.quantity - 1)}>-</Button>
                          </ButtonGroup>
                          <Button variant="outlined" color="error">Remove item</Button>
                     </Box>

@@ -29,39 +29,100 @@ useEffect(() => {
                 }
               fetchcarts();
       }, [token]);
-const addItemToCart=async(productId:string)=>{
-  try{
-    console.log(token)
-     const response=await fetch("http://localhost:3001/cart/items",{
-            method:"POST",
-            headers:{
-                'Content-Type':'application/json',
-                 'Authorization': `Bearer ${token}`
-            },
-            body:JSON.stringify({
-               productId,
-                quantity:1
-            })
-        })
-        if(!response.ok){
-            setError("Failed to add to cart") 
-        }
-      const cart=await response.json();
-      if(!cart){
-         setError("Failed to parse cart")
-      }
-     const cartItemsMapped=cart.items.map(({product,quantity,unitprice}:{product:any,quantity:number,unitprice:number})=>
-              ({productId:product._id,title:product.title,image:product.image,quantity,unitprice}))  
-     setCartItems([...cartItemsMapped]);
-     setTotalAmount(cart.totalAmount);
+const addItemToCart = async (productId: string) => {
+  try {
+    const alreadyInCart = cartItems.some(item => item.productId === productId);
+    if (alreadyInCart) {
+      setError("Product is already in the cart");
+      console.log(error)
+      return;
     }
-  catch(error){
-   console.log(error)
+
+    
+    const response = await fetch("http://localhost:3001/cart/items", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        productId,
+        quantity: 1
+      })
+    });
+
+    if (!response.ok) {
+      setError("Failed to add to cart");
+      return;
+    }
+
+    const cart = await response.json();
+    if (!cart) {
+      setError("Failed to parse cart");
+      return;
+    }
+
+    const cartItemsMapped = cart.items.map(
+      ({ product, quantity, unitprice }: { product: any, quantity: number, unitprice: number }) => ({
+        productId: product._id,
+        title: product.title,
+        image: product.image,
+        quantity,
+        unitprice
+      })
+    );
+
+    setCartItems([...cartItemsMapped]);
+    setTotalAmount(cart.totalAmount);
+  } catch (error) {
+    console.log(error);
   }
-}
+};
+const updateItemToCart = async (productId: string,quantity:number) => {
+  try {
+    console.log(token);
+    const response = await fetch("http://localhost:3001/cart/items", {
+      method: "PUT",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        productId,
+        quantity
+      })
+    });
+
+    if (!response.ok) {
+      setError("Failed to add to cart");
+      return;
+    }
+
+    const cart = await response.json();
+    if (!cart) {
+      setError("Failed to parse cart");
+      return;
+    }
+
+    const cartItemsMapped = cart.items.map(
+      ({ product, quantity, unitprice }: { product: any, quantity: number, unitprice: number }) => ({
+        productId: product._id,
+        title: product.title,
+        image: product.image,
+        quantity,
+        unitprice
+      })
+    );
+
+    setCartItems([...cartItemsMapped]);
+    setTotalAmount(cart.totalAmount);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 return(
-    <CartContext.Provider value={{cartItems,totalAmount,addItemToCart}}>{children}</CartContext.Provider>
+    <CartContext.Provider value={{cartItems,totalAmount,addItemToCart,updateItemToCart}}>{children}</CartContext.Provider>
 )
 }
 export  default Cartprovider;
