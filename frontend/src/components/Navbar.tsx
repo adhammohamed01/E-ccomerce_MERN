@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Badge, { badgeClasses } from '@mui/material/Badge';
 import styled from '@emotion/styled';
+import { useCart } from '../contex/Cart/CartContext';
 const CartBadge = styled(Badge)(() => ({
   [`& .${badgeClasses.badge}`]: {
     top: -12,
@@ -37,7 +38,7 @@ const CartBadge = styled(Badge)(() => ({
 function Navbar() {
   const {username,isAuthenticated,logout}=useAuth();
   
-  
+  const{cartItems}=useCart();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
  const Navigate=useNavigate();
@@ -66,46 +67,52 @@ function Navbar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Box sx={{ display:"flex",flexDirection:"row",justifyContent:"space-between",width:"100%"}}>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            MEN Hub
-          </Typography>
+         
+      <Box sx={{ display:"flex",flexDirection:"row",justifyContent:"space-between",width:"100%"}}>
+          <Button variant='text' sx={{color:"#ffffff"}} onClick={()=> {Navigate('/')}}>
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href="#app-bar-with-responsive-menu"
+                sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'monospace',
+                  fontWeight: 700,
+                  color: 'inherit',
+                  textDecoration: 'none',
+                }}
+              >
+                MEN Hub
+              </Typography>
+              </Button>
           </Box>
-
-    <Box sx={{ display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center",width:"100%"}}>
-        
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            MEN Hub
-          </Typography>
-          </Box>
+          
+    
+      <Box sx={{ display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center",width:"100%"}}>
+          <Button variant='text' sx={{color:"#ffffff"}} onClick={()=> {Navigate('/')}}>
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href="#app-bar-with-responsive-menu"
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              MEN Hub
+            </Typography>
+            </Button>
+            </Box>
+      
           <Box>
           <Box sx={{ flexGrow: 0 }}>
             
@@ -114,7 +121,7 @@ function Navbar() {
               <Box display="flex" alignItems="center" gap={2}>
                  <IconButton onClick={handleCart}>
                   <ShoppingCartIcon fontSize="small" sx={{color:"#ffffff"}} />
-                  <CartBadge badgeContent={2} color="primary" overlap="circular" />
+                  <CartBadge badgeContent={cartItems.length} color="primary" overlap="circular" />
                 </IconButton>
               <Typography>{username}</Typography>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

@@ -11,9 +11,16 @@ const CreateCartForUser=async function({userId}:ICreateCartForUser) {
 };
 interface IGetActiveCartForUser{
     userId:string;
+    populateProduct?:boolean;
 }
-export const GetActiveCartForUser=async function({userId}:IGetActiveCartForUser) {
-     let cart=await cartModel.findOne({userId,status:"active"});
+export const GetActiveCartForUser=async function({userId,populateProduct}:IGetActiveCartForUser) {
+     let cart;
+     if(populateProduct){
+      cart=await cartModel.findOne({userId,status:"active"}).populate('items.product')
+     }
+     else{
+      cart=await cartModel.findOne({userId,status:"active"});
+     }
      if(!cart){
        cart=await CreateCartForUser({userId});
      }
@@ -42,9 +49,9 @@ if(product.stock<quantity){
 cart.items.push({product:productId,unitprice:product.price,quantity:quantity})
 
 cart.totalAmount +=product.price * quantity;
-const updatedcart=await cart.save()
+await cart.save()
 
- return{data:updatedcart,statuscode:200};
+ return{data:await GetActiveCartForUser({userId,populateProduct:true}),statuscode:200};
 }
 interface IUpdateItemInCart{
   productId:any;
@@ -77,8 +84,8 @@ let total = otherCartItems.reduce(function(sum,product){
 },0)
 total+=exists_in_cart.quantity * exists_in_cart.unitprice;
 cart.totalAmount=total
-const updatedcart=await cart.save();
-return {data:updatedcart,statuscode:200};
+await cart.save();
+return {data:await GetActiveCartForUser({userId,populateProduct:true}),statuscode:200};
 }
 interface IDeleteItemInCart{
   productId:any;
@@ -103,8 +110,8 @@ const total = otherCartItems.reduce(function(sum,product){
 },0)
 cart.items=otherCartItems;
 cart.totalAmount=total
-const updatedcart=await cart.save();
-return {data:updatedcart,statuscode:200};
+await cart.save();
+return {data:await GetActiveCartForUser({userId,populateProduct:true}),statuscode:200};
 }
 interface IClearcart{
     userId:string;

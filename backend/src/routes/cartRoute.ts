@@ -11,7 +11,7 @@ const router=express.Router();
 router.get('/',validateJWT,async function(req:userrequest,res){
     try{
         const userId=req.user._id;   
-        const cart=await GetActiveCartForUser({userId});
+        const cart=await GetActiveCartForUser({userId,populateProduct:true});
         res.status(200).send(cart);
     }catch(err){
         res.status(500).send("Something went wrong!")
