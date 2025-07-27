@@ -7,12 +7,16 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 const Cartpage=()=>{
    
-    const {cartItems,totalAmount,updateItemToCart}=useCart();
+    const {cartItems,totalAmount,updateItemToCart,removeItemInCart}=useCart();
     const handleQuantity=(productId:string,quantity:number)=>{
         if(quantity <= 0){
           return;
         }
         updateItemToCart(productId,quantity)
+    }
+    const handleRemoveItem=(productId:string)=>{
+       
+        removeItemInCart(productId);
     }
     
 
@@ -35,7 +39,8 @@ const Cartpage=()=>{
                                 <Button onClick={()=>handleQuantity(item.productId,item.quantity + 1)}>+</Button>
                                 <Button onClick={()=>handleQuantity(item.productId,item.quantity - 1)}>-</Button>
                          </ButtonGroup>
-                         <Button variant="outlined" color="error">Remove item</Button>
+                         <Button onClick={()=>handleRemoveItem(item.productId)} 
+                         variant="outlined" color="error">Remove item</Button>
                     </Box>
                      
                  ))} 

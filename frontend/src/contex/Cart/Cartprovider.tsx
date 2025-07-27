@@ -120,9 +120,46 @@ const updateItemToCart = async (productId: string,quantity:number) => {
     console.log(error);
   }
 };
+const removeItemInCart=async (productId: string) => {
+  try {
+    console.log(token);
+    const response = await fetch(`http://localhost:3001/cart/items/${productId}`, {
+      method: "DELETE",
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+   
+    });
 
+    if (!response.ok) {
+      setError("Failed to delete to cart");
+      return;
+    }
+
+    const cart = await response.json();
+    if (!cart) {
+      setError("Failed to parse cart");
+      return;
+    }
+
+    const cartItemsMapped = cart.items.map(
+      ({ product, quantity, unitprice }: { product: any, quantity: number, unitprice: number }) => ({
+        productId: product._id,
+        title: product.title,
+        image: product.image,
+        quantity,
+        unitprice
+      })
+    );
+
+    setCartItems([...cartItemsMapped]);
+    setTotalAmount(cart.totalAmount);
+  } catch (error) {
+    console.log(error);
+  }
+};
 return(
-    <CartContext.Provider value={{cartItems,totalAmount,addItemToCart,updateItemToCart}}>{children}</CartContext.Provider>
+    <CartContext.Provider value={{cartItems,totalAmount,addItemToCart,updateItemToCart,removeItemInCart}}>{children}</CartContext.Provider>
 )
 }
 export  default Cartprovider;
