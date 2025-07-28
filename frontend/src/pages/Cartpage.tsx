@@ -4,9 +4,14 @@ import Typography from "@mui/material/Typography"
 import { useCart } from "../contex/Cart/CartContext"
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { useNavigate } from "react-router-dom";
+
 
 const Cartpage=()=>{
-   
+   const Navigate=useNavigate();
+    const handlecheckout=()=>{
+    Navigate("/checkout")
+  }
     const {cartItems,totalAmount,updateItemToCart,removeItemInCart,clearCart}=useCart();
     const handleQuantity=(productId:string,quantity:number)=>{
         if(quantity <= 0){
@@ -59,8 +64,9 @@ const Cartpage=()=>{
                     </Box>
                      
                  ))} 
-                   <Box>
+                   <Box  sx={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
                     <Typography variant="h4">Total Amount:{totalAmount}EGP</Typography>
+                    <Button variant="contained" onClick={handlecheckout}>Go to checkout</Button>
                    </Box>
                  </Box></>:(<Typography variant="h4">cart is empty please start shoping and add items</Typography>)}                 
            

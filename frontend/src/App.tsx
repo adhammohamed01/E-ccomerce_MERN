@@ -7,6 +7,7 @@ import Authprovider from "./contex/Auth/Authprovider"
 import Cartpage from "./pages/Cartpage"
 import ProtectedRoute from "./components/Protectedroute"
 import Cartprovider from "./contex/Cart/Cartprovider"
+import Checkoutpage from "./pages/Checkoutpage"
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
          <Route path="/login" element={<Loginpage/>}/> 
          <Route element={<ProtectedRoute/>}>
          <Route path="/cart" element={<Cartpage/>}/>
+         <Route path="/checkout" element={<Checkoutpage/>}/>
          </Route>
       </Routes>
    </BrowserRouter>
