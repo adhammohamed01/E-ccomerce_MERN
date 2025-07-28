@@ -6,14 +6,33 @@ import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { TextField } from "@mui/material";
+import { useAuth } from "../contex/Auth/AuthContext";
 
 
 const Checkoutpage=()=>{
     const adressRef=useRef<HTMLInputElement>(null);
     const Navigate=useNavigate();
-    const handlecheckout=()=>{
-        Navigate('/checkout')
+    const{token}=useAuth()
+    const handleConfirmOrder=async()=>{
+        const address=adressRef.current?.value;
+        if(!address){return;}
+        const response = await fetch("http://localhost:3001/cart/checkout", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        address
+      })
+    });
+
+    if (!response.ok) {
+      return;
     }
+    Navigate('/order-success')
+    }
+  
     const {cartItems,totalAmount}=useCart();
    
     return ( <Container>
@@ -42,7 +61,7 @@ const Checkoutpage=()=>{
                      
                  ))} 
                    <Box  sx={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>
-                    <Button sx={{ position: "absolute", left: "47%"}} variant="contained" onClick={handlecheckout}>Pay now</Button>
+                    <Button sx={{ position: "absolute", left: "47%"}} variant="contained" onClick={handleConfirmOrder}>Pay now</Button>
                     <Typography sx={{ position: "absolute", left: "77%"}} variant="h6">Total Amount:{totalAmount}EGP</Typography>
                     
                    </Box>
