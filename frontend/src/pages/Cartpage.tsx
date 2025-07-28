@@ -7,7 +7,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 
 const Cartpage=()=>{
    
-    const {cartItems,totalAmount,updateItemToCart,removeItemInCart}=useCart();
+    const {cartItems,totalAmount,updateItemToCart,removeItemInCart,clearCart}=useCart();
     const handleQuantity=(productId:string,quantity:number)=>{
         if(quantity <= 0){
           return;
@@ -18,12 +18,27 @@ const Cartpage=()=>{
        
         removeItemInCart(productId);
     }
-    
+    const handleClearItem =()=>{
+      clearCart();
+    }
 
-    return ( <Container >
-            <Box sx={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center", mt:4}}>
-                 <Typography variant="h4">My cart</Typography> 
-                  </Box>
+    return ( <Container>
+           
+            <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", mt: 4, width: "100%" ,mb:4}}>
+              <Button 
+                onClick={() => handleClearItem()} 
+                variant="outlined" 
+                color="error" 
+                sx={{ ml: 2 }}
+              >
+                Clear item
+              </Button>
+
+              <Typography variant="h4" sx={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
+                My Cart
+              </Typography>
+            </Box>
+            {cartItems.length ? <>
                 <Box sx={{display:"flex",flexDirection:"column"}} gap={4}>
                  {cartItems.map((item)=>(
                     <Box sx={{display:"flex",flexDirection:"row",justifyContent:"space-between",alignItems:"center",border:3
@@ -47,7 +62,7 @@ const Cartpage=()=>{
                    <Box>
                     <Typography variant="h4">Total Amount:{totalAmount}EGP</Typography>
                    </Box>
-                 </Box>                 
+                 </Box></>:(<Typography variant="h4">cart is empty please start shoping and add items</Typography>)}                 
            
            
         </Container>)

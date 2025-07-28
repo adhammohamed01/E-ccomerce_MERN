@@ -158,8 +158,35 @@ const removeItemInCart=async (productId: string) => {
     console.log(error);
   }
 };
+const clearCart=async () => {
+  try {
+    console.log(token);
+    const response = await fetch(`http://localhost:3001/cart`, {
+      method: "DELETE",
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+   
+    });
+
+    if (!response.ok) {
+      setError("Failed to clear cart");
+      return;
+    }
+
+    const cart = await response.json();
+    if (!cart) {
+      setError("Failed to parse cart");
+      return;
+    }
+    setCartItems([]);
+    setTotalAmount(0);
+  } catch (error) {
+    console.log(error);
+  }
+};
 return(
-    <CartContext.Provider value={{cartItems,totalAmount,addItemToCart,updateItemToCart,removeItemInCart}}>{children}</CartContext.Provider>
+    <CartContext.Provider value={{cartItems,totalAmount,addItemToCart,updateItemToCart,removeItemInCart,clearCart}}>{children}</CartContext.Provider>
 )
 }
 export  default Cartprovider;
