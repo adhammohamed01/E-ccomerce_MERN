@@ -50,6 +50,10 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+   const handleMyOrders=()=>{
+     Navigate('/my-orders');
+     handleCloseUserMenu()
+  }
   const handleLogin=()=>{
     Navigate('/login')
   }
@@ -146,7 +150,7 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               
-                <MenuItem  onClick={handleCloseUserMenu}>
+                <MenuItem  onClick={handleMyOrders}>
                   <Typography sx={{ textAlign: 'center' }}>My orders</Typography>
                 </MenuItem>
                  <MenuItem  onClick={handleLogout}>

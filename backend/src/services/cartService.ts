@@ -32,24 +32,24 @@ interface IAddItemToCart{
   userId:string;
 }
 export const addItemToCart=async function({productId,quantity,userId}:IAddItemToCart){
-const cart=await GetActiveCartForUser({userId})
-const exists_in_cart=cart.items.find(function(p){
-p.product.toString()===productId
-})
-if(exists_in_cart){
-  return{data:"Item already exists in cart",statuscode:400};
-}
-const product=await productModel.findById(productId)
-if(!product){
-  return{data:"Product not found",statuscode:400};
-}
-if(product.stock<quantity){
-  return{data:"Low stock for item",statuscode:400};
-}
-cart.items.push({product:productId,unitprice:product.price,quantity:quantity})
+  const cart=await GetActiveCartForUser({userId})
+  const exists_in_cart=cart.items.find(function(p){
+  p.product.toString()===productId
+  })
+  if(exists_in_cart){
+    return{data:"Item already exists in cart",statuscode:400};
+  }
+  const product=await productModel.findById(productId)
+  if(!product){
+    return{data:"Product not found",statuscode:400};
+  }
+  if(product.stock<quantity){
+    return{data:"Low stock for item",statuscode:400};
+  }
+  cart.items.push({product:productId,unitprice:product.price,quantity:quantity})
 
-cart.totalAmount +=product.price * quantity;
-await cart.save()
+  cart.totalAmount +=product.price * quantity;
+  await cart.save()
 
  return{data:await GetActiveCartForUser({userId,populateProduct:true}),statuscode:200};
 }
